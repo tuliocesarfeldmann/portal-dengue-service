@@ -1,7 +1,6 @@
 package com.ufsm.portaldengue.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +9,9 @@ import java.util.Date;
 @Table(name = "USUARIOS")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

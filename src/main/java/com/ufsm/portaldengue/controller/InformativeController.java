@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -24,6 +21,18 @@ public class InformativeController {
     public ResponseEntity<?> register(@RequestBody Informative informative){
         try {
             return ResponseEntity.ok(service.register(informative));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> list(){
+        try {
+            return ResponseEntity.ok("TESTE");
         } catch (Exception e) {
             log.error(e.toString());
             return ResponseEntity
