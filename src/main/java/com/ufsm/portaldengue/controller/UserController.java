@@ -23,6 +23,18 @@ public class UserController {
     @Autowired
     UserService service;
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserDTO user){
+        try {
+            return ResponseEntity.ok(service.login(user));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Validated UserDTO user){
         try {

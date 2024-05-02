@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class UserService {
     @Autowired
@@ -19,6 +21,24 @@ public class UserService {
 
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+    public boolean login(UserDTO userDTO) {
+        User user = repository.findByEmail(userDTO.getEmail());
+
+        if (isNull(user)) {
+            throw new RuntimeException("Usuário não encontrado para o email " + userDTO.getEmail());
+        }
+
+        String password = user.getHash();
+        String salt = user.getSalt();
+        String informedPassword = userDTO.getPassword();
+
+        if(!new BCryptPasswordEncoder().matches(informedPassword + salt, password)) {
+            throw new RuntimeException("Senha inválida para o email " + userDTO.getEmail());
+        }
+
+        return true;
+    }
 
     public User register(UserDTO userDTO) {
 
