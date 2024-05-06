@@ -1,5 +1,6 @@
 package com.ufsm.portaldengue.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "SITUACAO_PONTOS")
+@AllArgsConstructor
 @Getter
 @Setter
 public class PointSituation {
@@ -16,5 +18,9 @@ public class PointSituation {
 
     @Column(name = "descricao")
     private String description;
+
+    public static PointSituation getDefaultPointSituation() {
+      return new PointSituation(1L, "EM ANÁLISE");
+    }
 
 }

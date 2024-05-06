@@ -3,6 +3,8 @@ package com.ufsm.portaldengue.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 @Entity
@@ -22,5 +24,12 @@ public class Point {
 
     @Column(name = "descricao")
     private String description;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime creationDate = LocalDateTime.now();
+
+    @JoinColumn(name = "id_situacao")
+    @ManyToOne
+    private PointSituation pointSituation = PointSituation.getDefaultPointSituation();
 
 }
