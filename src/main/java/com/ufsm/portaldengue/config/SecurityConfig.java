@@ -22,7 +22,7 @@ public class SecurityConfig {
             CustomBasicAuthFilter customBasicAuthFilter) throws Exception {
 
         http.authorizeRequests()
-            .antMatchers("/public/**").permitAll()
+            .antMatchers("/**/public/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .sessionManagement()

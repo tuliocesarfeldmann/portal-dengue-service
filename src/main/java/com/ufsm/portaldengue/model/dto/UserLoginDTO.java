@@ -1,16 +1,13 @@
 package com.ufsm.portaldengue.model.dto;
 
 import com.sun.istack.NotNull;
-import lombok.Data;
 
-@Data
-public class UserDTO {
-    @NotNull
-    private String cpf;
+import lombok.Getter;
+import lombok.Setter;
 
-    @NotNull
-    private String name;
-
+@Getter
+@Setter
+public class UserLoginDTO {
     @NotNull
     private String email;
 

@@ -1,6 +1,7 @@
 package com.ufsm.portaldengue.service;
 
 import com.ufsm.portaldengue.model.dto.UserDTO;
+import com.ufsm.portaldengue.model.dto.UserLoginDTO;
 import com.ufsm.portaldengue.model.entity.User;
 import com.ufsm.portaldengue.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
-    public boolean login(UserDTO userDTO) {
+    public boolean login(UserLoginDTO userDTO) {
         User user = repository.findByEmail(userDTO.getEmail());
 
         if (isNull(user)) {

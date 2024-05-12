@@ -1,6 +1,7 @@
 package com.ufsm.portaldengue.controller;
 
 import com.ufsm.portaldengue.model.dto.UserDTO;
+import com.ufsm.portaldengue.model.dto.UserLoginDTO;
 import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.entity.User;
 import com.ufsm.portaldengue.service.PointService;
@@ -24,7 +25,7 @@ public class UserController {
     UserService service;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO user){
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO user){
         try {
             return ResponseEntity.ok(service.login(user));
         } catch (Exception e) {
