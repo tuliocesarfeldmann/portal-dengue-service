@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressDetailsDTO {
+public class ExternalAddressDetailsDTO {
     @JsonAlias("place_id")
     private String placeId;
 
@@ -27,7 +27,7 @@ public class AddressDetailsDTO {
     @JsonAlias("display_name")
     private String displayName;
 
-    private AddressDTO address;
+    private ExternalAddressDTO address;
 
     private String[] boundingbox;
 }

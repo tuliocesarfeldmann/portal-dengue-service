@@ -1,17 +1,15 @@
 package com.ufsm.portaldengue.controller;
 
+import com.ufsm.portaldengue.model.dto.ConfirmPointDTO;
 import com.ufsm.portaldengue.model.dto.UpdateStatusDTO;
 import com.ufsm.portaldengue.model.entity.Point;
+import com.ufsm.portaldengue.model.enums.StatusEnum;
 import com.ufsm.portaldengue.service.PointService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -47,7 +45,9 @@ public class PointController {
     @PostMapping("/updateStatus")
     public ResponseEntity<?> updateStatus(@RequestBody UpdateStatusDTO updateStatus){
         try {
-            service.updateStatus(updateStatus);
+            StatusEnum status = StatusEnum.fromString(updateStatus.getStatus());
+
+            service.updateStatus(updateStatus.getPointId(), status);
 
             return ResponseEntity.ok()
                     .body("Atualizado com sucesso!");
@@ -60,9 +60,12 @@ public class PointController {
     }
 
     @GetMapping("/address/details")
-    public ResponseEntity<?> addressDetails(@RequestBody Point point){
+    public ResponseEntity<?> addressDetails(
+            @RequestParam("lat") String lat,
+            @RequestParam("lon") String lon
+    ){
         try {
-            return ResponseEntity.ok(service.getAddressDetails(point));
+            return ResponseEntity.ok(service.getAddressDetails(lat, lon));
         } catch (Exception e) {
             log.error(e.toString());
             return ResponseEntity
@@ -70,4 +73,19 @@ public class PointController {
                     .body(e.getMessage());
         }
     }
+
+    @PostMapping("/confirm")
+    public ResponseEntity<?> confirmPoint(@RequestBody ConfirmPointDTO confirmPoint){
+        try {
+            service.confirmPoint(confirmPoint);
+
+            return ResponseEntity.ok("Ponto confirmado com sucesso!");
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
 }

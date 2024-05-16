@@ -1,29 +1,19 @@
 package com.ufsm.portaldengue.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Builder
 public class AddressDTO {
-    private String amenity;
 
     private String road;
 
-    private String suburb;
-
-    @JsonAlias("city_district")
-    private String cityDistrict;
+    private String neighborhood;
 
     private String town;
-
-    private String municipality;
-
-    @JsonAlias("state_district")
-    private String stateDistrict;
 
     private String state;
 
@@ -33,6 +23,5 @@ public class AddressDTO {
 
     private String country;
 
-    @JsonAlias("country_code")
     private String countryCode;
 }

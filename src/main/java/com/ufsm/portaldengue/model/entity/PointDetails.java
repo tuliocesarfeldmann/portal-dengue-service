@@ -1,5 +1,6 @@
 package com.ufsm.portaldengue.model.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "DETALHES_PONTOS")
 @Getter
 @Setter
+@Builder
 public class PointDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +36,9 @@ public class PointDetails {
 
     @Column(name = "estado")
     private String state;
+
+    @OneToOne
+    @JoinColumn(name = "ID_PONTO")
+    private Point point;
 
 }
