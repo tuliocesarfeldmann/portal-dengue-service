@@ -7,6 +7,8 @@ import com.ufsm.portaldengue.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InformativeService {
     @Autowired
@@ -16,4 +18,7 @@ public class InformativeService {
         return repository.save(point);
     }
 
+    public List<Informative> list() {
+        return repository.findAll();
+    }
 }

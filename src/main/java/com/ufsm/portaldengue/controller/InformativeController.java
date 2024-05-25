@@ -29,10 +29,10 @@ public class InformativeController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping("/public/list")
     public ResponseEntity<?> list(){
         try {
-            return ResponseEntity.ok("TESTE");
+            return ResponseEntity.ok(service.list());
         } catch (Exception e) {
             log.error(e.toString());
             return ResponseEntity
