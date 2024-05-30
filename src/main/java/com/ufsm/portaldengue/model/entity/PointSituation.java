@@ -25,4 +25,8 @@ public class PointSituation {
       return new PointSituation(1L, "EM ANÁLISE");
     }
 
+    public static PointSituation getAcceptedPointSituation() {
+      return new PointSituation(3L, "APROVADO");
+    }
+
 }

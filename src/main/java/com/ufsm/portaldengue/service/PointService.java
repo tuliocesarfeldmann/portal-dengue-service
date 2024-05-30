@@ -44,6 +44,10 @@ public class PointService {
       return repository.findByPointSituation(PointSituation.getDefaultPointSituation());
     }
 
+    public List<Point> listAcceptedPoints() {
+      return repository.findByPointSituation(PointSituation.getAcceptedPointSituation());
+    }
+
     public void updateStatus(Long pointId, StatusEnum status) {
         PointSituation pointSituation = mapStatusToSituation(status);
 

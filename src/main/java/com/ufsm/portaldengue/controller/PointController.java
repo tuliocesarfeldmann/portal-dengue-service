@@ -6,6 +6,11 @@ import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.enums.StatusEnum;
 import com.ufsm.portaldengue.service.PointService;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +27,23 @@ public class PointController {
     public ResponseEntity<?> register(@RequestBody Point point){
         try {
             return ResponseEntity.ok(service.register(point));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/public/list")
+    public ResponseEntity<?> listAcceptedPoints(){
+        try {
+            Collection<Point> acceptedPointList = service.listAcceptedPoints();
+            List<List<Double>> formatedPoints = acceptedPointList.stream()
+              .map(point -> List.of(point.getLatitude(), point.getLongitude(), 1.0))
+              .toList();
+
+            return ResponseEntity.ok(formatedPoints);
         } catch (Exception e) {
             log.error(e.toString());
             return ResponseEntity
