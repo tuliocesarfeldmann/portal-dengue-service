@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/public/user")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     UserService service;
 
-    @PostMapping("/login")
+    @PostMapping("/public/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDTO user){
         try {
             return ResponseEntity.ok(service.login(user));
