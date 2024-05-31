@@ -1,13 +1,18 @@
 package com.ufsm.portaldengue.controller;
 
 import com.ufsm.portaldengue.model.dto.ConfirmPointDTO;
+import com.ufsm.portaldengue.model.dto.DailyCountDTO;
+import com.ufsm.portaldengue.model.dto.NeighborhoodCountDTO;
 import com.ufsm.portaldengue.model.dto.UpdateStatusDTO;
 import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.enums.StatusEnum;
+import com.ufsm.portaldengue.repository.PointRepository;
 import com.ufsm.portaldengue.service.PointService;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 public class PointController {
     @Autowired
     PointService service;
+
+    @Autowired
+    PointRepository pointRepository;
 
     @PostMapping("/public/register")
     public ResponseEntity<?> register(@RequestBody Point point){
@@ -50,6 +58,18 @@ public class PointController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         }
+    }
+
+    @GetMapping("/public/daily-count")
+    public ResponseEntity<List<DailyCountDTO>> getDailyCounts() {
+        LocalDateTime thirtyDaysAgo = LocalDateTime.of(LocalDate.now().minusDays(30), LocalTime.MIN);
+        List<DailyCountDTO> dailyCounts = pointRepository.findDailyCounts(thirtyDaysAgo);
+        return ResponseEntity.ok(dailyCounts);
+    }
+
+    @GetMapping("/public/neighborhood-count")
+    public ResponseEntity<List<NeighborhoodCountDTO>> getNeighborhoodCounts() {
+        return ResponseEntity.ok(pointRepository.findPointsByNeighborhood());
     }
 
     @GetMapping("/list")
