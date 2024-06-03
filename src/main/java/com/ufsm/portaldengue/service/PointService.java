@@ -2,10 +2,12 @@ package com.ufsm.portaldengue.service;
 
 import com.ufsm.portaldengue.client.ExternalClient;
 import com.ufsm.portaldengue.model.dto.*;
+import com.ufsm.portaldengue.model.entity.CorrectiveActions;
 import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.entity.PointDetails;
 import com.ufsm.portaldengue.model.entity.PointSituation;
 import com.ufsm.portaldengue.model.enums.StatusEnum;
+import com.ufsm.portaldengue.repository.CorrectiveActionsRepository;
 import com.ufsm.portaldengue.repository.PointDetailsRepository;
 import com.ufsm.portaldengue.repository.PointRepository;
 
@@ -33,6 +35,9 @@ public class PointService {
     @Autowired
     PointDetailsRepository pointDetailsRepository;
 
+    @Autowired
+    CorrectiveActionsRepository correctiveActionsRepository;
+
     @Value("${application.client.key.external}")
     private String apiKey;
 
@@ -52,6 +57,16 @@ public class PointService {
         PointSituation pointSituation = mapStatusToSituation(status);
 
         repository.updateStatusById(pointId, pointSituation);
+    }
+
+    public void applyFix(Long pointId, String appliedFix) {
+        Point point = repository.findById(pointId).orElseThrow();
+        CorrectiveActions correctiveActions = new CorrectiveActions();
+        correctiveActions.setDescription(appliedFix);
+        correctiveActions.setPointId(point);
+
+        correctiveActionsRepository.save(correctiveActions);
+        updateStatus(pointId, StatusEnum.DONE);
     }
 
     private PointSituation mapStatusToSituation(StatusEnum status) {

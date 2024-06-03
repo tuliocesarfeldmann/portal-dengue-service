@@ -1,5 +1,6 @@
 package com.ufsm.portaldengue.controller;
 
+import com.ufsm.portaldengue.model.dto.ApplyFixDTO;
 import com.ufsm.portaldengue.model.dto.ConfirmPointDTO;
 import com.ufsm.portaldengue.model.dto.DailyCountDTO;
 import com.ufsm.portaldengue.model.dto.NeighborhoodCountDTO;
@@ -84,12 +85,39 @@ public class PointController {
         }
     }
 
+    @GetMapping("/listPointsToFix")
+    public ResponseEntity<?> listPointsToFix(){
+        try {
+            return ResponseEntity.ok(service.listAcceptedPoints());
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
     @PostMapping("/updateStatus")
     public ResponseEntity<?> updateStatus(@RequestBody UpdateStatusDTO updateStatus){
         try {
             StatusEnum status = StatusEnum.fromString(updateStatus.getStatus());
 
             service.updateStatus(updateStatus.getPointId(), status);
+
+            return ResponseEntity.ok()
+                    .body("Atualizado com sucesso!");
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/applyFix")
+    public ResponseEntity<?> applyFix(@RequestBody ApplyFixDTO applyFix){
+        try {
+            service.applyFix(applyFix.getPointId(), applyFix.getAppliedFix());
 
             return ResponseEntity.ok()
                     .body("Atualizado com sucesso!");
