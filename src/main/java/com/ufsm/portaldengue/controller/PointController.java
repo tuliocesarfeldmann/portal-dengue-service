@@ -58,20 +58,24 @@ public class PointController {
     }
 
     @GetMapping("/public/daily-count")
-    public ResponseEntity<List<DailyCountDTO>> getDailyCounts() {
-        LocalDateTime thirtyDaysAgo = LocalDateTime.of(LocalDate.now().minusDays(30), LocalTime.MIN);
-        List<DailyCountDTO> dailyCounts = pointRepository.findDailyCounts(thirtyDaysAgo);
+    public ResponseEntity<List<DailyCountDTO>> getDailyCounts(@RequestParam long days, @RequestParam long statusId) {
+        LocalDateTime daysAgo = LocalDateTime.of(LocalDate.now().minusDays(days), LocalTime.MIN);
+        List<DailyCountDTO> dailyCounts = pointRepository.findDailyCounts(daysAgo, statusId);
         return ResponseEntity.ok(dailyCounts);
     }
 
     @GetMapping("/public/neighborhood-count")
-    public ResponseEntity<List<NeighborhoodCountDTO>> getNeighborhoodCounts() {
-        return ResponseEntity.ok(pointRepository.findPointsByNeighborhood());
+    public ResponseEntity<List<NeighborhoodCountDTO>> getNeighborhoodCounts(@RequestParam long days, @RequestParam long statusId) {
+        LocalDateTime daysAgo = LocalDateTime.of(LocalDate.now().minusDays(days), LocalTime.MIN);
+        List<NeighborhoodCountDTO> pointsByNeighborhood = pointRepository.findPointsByNeighborhood(daysAgo, statusId);
+        return ResponseEntity.ok(pointsByNeighborhood);
     }
 
     @GetMapping("/public/status-count")
-    public ResponseEntity<List<StatusCountDTO>> getStatusCounts() {
-        return ResponseEntity.ok(pointRepository.findPointsByStatus());
+    public ResponseEntity<List<StatusCountDTO>> getStatusCounts(@RequestParam long days) {
+        LocalDateTime daysAgo = LocalDateTime.of(LocalDate.now().minusDays(days), LocalTime.MIN);
+        List<StatusCountDTO> pointsByStatus = pointRepository.findPointsByStatus(daysAgo);
+        return ResponseEntity.ok(pointsByStatus);
     }
 
     @GetMapping("/list")

@@ -29,21 +29,27 @@ public interface PointRepository extends JpaRepository<Point, Long> {
 
   @Query("SELECT new com.ufsm.portaldengue.model.dto.DailyCountDTO(DATE_FORMAT(p.creationDate, '%d/%m/%Y'), COUNT(p)) " +
           "FROM Point p " +
+          "JOIN PointSituation ps ON ps.id = p.pointSituation.id " +
           "WHERE p.creationDate >= :startDate " +
+          "AND ps.id = :statusId " +
           "GROUP BY DATE_FORMAT(p.creationDate, '%d/%m/%Y') " +
           "ORDER BY DATE_FORMAT(p.creationDate, '%d/%m/%Y')")
-  List<DailyCountDTO> findDailyCounts(@Param("startDate") LocalDateTime startDate);
+  List<DailyCountDTO> findDailyCounts(@Param("startDate") LocalDateTime startDate, @Param("statusId") long statusId);
 
   @Query("SELECT new com.ufsm.portaldengue.model.dto.NeighborhoodCountDTO(dp.neighborhood, COUNT(p)) " +
           "FROM Point p " +
           "JOIN PointDetails dp ON p.id = dp.point.id " +
+          "JOIN PointSituation ps ON ps.id = p.pointSituation.id " +
+          "WHERE p.creationDate >= :startDate " +
+          "AND ps.id = :statusId " +
           "GROUP BY dp.neighborhood")
-  List<NeighborhoodCountDTO> findPointsByNeighborhood();
+  List<NeighborhoodCountDTO> findPointsByNeighborhood(@Param("startDate") LocalDateTime startDate, @Param("statusId") long statusId);
 
   @Query("SELECT new com.ufsm.portaldengue.model.dto.StatusCountDTO(ps.description, COUNT(p)) " +
           "FROM Point p " +
           "JOIN PointSituation ps ON ps.id = p.pointSituation.id " +
+          "WHERE p.creationDate >= :startDate " +
           "GROUP BY ps.description")
-  List<StatusCountDTO> findPointsByStatus();
+  List<StatusCountDTO> findPointsByStatus(@Param("startDate") LocalDateTime startDate);
 
 }
