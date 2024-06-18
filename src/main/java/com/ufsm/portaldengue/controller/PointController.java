@@ -1,10 +1,6 @@
 package com.ufsm.portaldengue.controller;
 
-import com.ufsm.portaldengue.model.dto.ApplyFixDTO;
-import com.ufsm.portaldengue.model.dto.ConfirmPointDTO;
-import com.ufsm.portaldengue.model.dto.DailyCountDTO;
-import com.ufsm.portaldengue.model.dto.NeighborhoodCountDTO;
-import com.ufsm.portaldengue.model.dto.UpdateStatusDTO;
+import com.ufsm.portaldengue.model.dto.*;
 import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.enums.StatusEnum;
 import com.ufsm.portaldengue.repository.PointRepository;
@@ -71,6 +67,11 @@ public class PointController {
     @GetMapping("/public/neighborhood-count")
     public ResponseEntity<List<NeighborhoodCountDTO>> getNeighborhoodCounts() {
         return ResponseEntity.ok(pointRepository.findPointsByNeighborhood());
+    }
+
+    @GetMapping("/public/status-count")
+    public ResponseEntity<List<StatusCountDTO>> getStatusCounts() {
+        return ResponseEntity.ok(pointRepository.findPointsByStatus());
     }
 
     @GetMapping("/list")

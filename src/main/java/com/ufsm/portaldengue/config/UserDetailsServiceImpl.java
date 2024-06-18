@@ -5,7 +5,6 @@ import com.ufsm.portaldengue.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public CustomUser loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailAndActiveTrue(email);
         if (user == null) {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }

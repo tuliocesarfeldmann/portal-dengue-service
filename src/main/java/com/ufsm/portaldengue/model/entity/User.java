@@ -1,5 +1,6 @@
 package com.ufsm.portaldengue.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +22,11 @@ public class User {
     private String cpf;
 
     @Column
+    @JsonIgnore
     private String hash;
 
     @Column
+    @JsonIgnore
     private String salt;
 
     @Column(name = "nome")
@@ -34,5 +37,8 @@ public class User {
 
     @Column(name = "data_criacao")
     private Date creationDate;
+
+    @Column(name = "ativo")
+    private Boolean active;
 
 }

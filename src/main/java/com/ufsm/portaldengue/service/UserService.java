@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 import static java.util.Objects.isNull;
@@ -24,7 +23,7 @@ public class UserService {
     BCryptPasswordEncoder passwordEncoder;
 
     public boolean login(UserLoginDTO userDTO) {
-        User user = repository.findByEmail(userDTO.getEmail());
+        User user = repository.findByEmailAndActiveTrue(userDTO.getEmail());
 
         if (isNull(user)) {
             throw new RuntimeException("Usuário não encontrado para o email " + userDTO.getEmail());
@@ -54,9 +53,16 @@ public class UserService {
                 .salt(salt)
                 .hash(hashedPassword)
                 .creationDate(new Date())
+                .active(true)
                 .build();
 
         return repository.save(user);
     }
 
+    @Transactional
+    public void updateUserStatus(Long id, boolean active) {
+        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setActive(active);
+        repository.save(user);
+    }
 }

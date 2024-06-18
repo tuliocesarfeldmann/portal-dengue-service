@@ -2,6 +2,7 @@ package com.ufsm.portaldengue.repository;
 
 import com.ufsm.portaldengue.model.dto.DailyCountDTO;
 import com.ufsm.portaldengue.model.dto.NeighborhoodCountDTO;
+import com.ufsm.portaldengue.model.dto.StatusCountDTO;
 import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.entity.PointSituation;
 
@@ -38,4 +39,11 @@ public interface PointRepository extends JpaRepository<Point, Long> {
           "JOIN PointDetails dp ON p.id = dp.point.id " +
           "GROUP BY dp.neighborhood")
   List<NeighborhoodCountDTO> findPointsByNeighborhood();
+
+  @Query("SELECT new com.ufsm.portaldengue.model.dto.StatusCountDTO(ps.description, COUNT(p)) " +
+          "FROM Point p " +
+          "JOIN PointSituation ps ON ps.id = p.pointSituation.id " +
+          "GROUP BY ps.description")
+  List<StatusCountDTO> findPointsByStatus();
+
 }

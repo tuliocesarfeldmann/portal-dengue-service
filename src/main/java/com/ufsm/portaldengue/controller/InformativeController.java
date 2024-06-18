@@ -1,7 +1,9 @@
 package com.ufsm.portaldengue.controller;
 
+import com.ufsm.portaldengue.model.dto.UpdateUserDTO;
 import com.ufsm.portaldengue.model.entity.Informative;
 import com.ufsm.portaldengue.model.entity.Point;
+import com.ufsm.portaldengue.repository.InformativeRepository;
 import com.ufsm.portaldengue.service.InformativeService;
 import com.ufsm.portaldengue.service.PointService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class InformativeController {
     @Autowired
     InformativeService service;
+
+    @Autowired
+    InformativeRepository repository;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Informative informative){
@@ -39,5 +44,11 @@ public class InformativeController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
