@@ -33,7 +33,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Analysis:
+  Database:
     runs-on: ubuntu-latest
 
     services:
@@ -46,6 +46,10 @@ jobs:
           MYSQL_DATABASE: portal_dengue
           MYSQL_USER: teste
           MYSQL_PASSWORD: teste
+
+  Analysis:
+    runs-on: ubuntu-latest
+    needs: Database
     
     steps:
       - uses: actions/checkout@v4
