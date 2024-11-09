@@ -28,7 +28,7 @@ jobs:
 
       - name: Run SonarQube Scanner
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: squ_1db975cf619fb3a1d0ebb26ff3f69e237767d4e6
           SONAR_HOST_URL: http://michelfkf.dev.br:9000
         run: |
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
