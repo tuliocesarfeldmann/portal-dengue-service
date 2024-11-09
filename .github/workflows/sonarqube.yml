@@ -78,7 +78,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          DATABASE_URL: db
+          DATABASE_URL: localhost
           DATABASE_NAME: portal_dengue
           DATABASE_USERNAME: teste
           DATABASE_PASSWORD: teste
