@@ -9,7 +9,6 @@ jobs:
   sonar:
     name: Run SonarQube Analysis
     runs-on: ubuntu-latest
-    environment: portal-dengue-secrets
 
     steps:
       - name: Checkout repository
