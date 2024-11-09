@@ -46,6 +46,10 @@ jobs:
           MYSQL_DATABASE: portal_dengue
           MYSQL_USER: teste
           MYSQL_PASSWORD: teste
+    steps:
+      - name: Start MYSQL
+        run: 
+          sudo /etc/init.d/mysql start
 
   Analysis:
     runs-on: ubuntu-latest
