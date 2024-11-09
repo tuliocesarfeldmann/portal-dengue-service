@@ -33,7 +33,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Database:
+
+  Analysis:
     runs-on: ubuntu-latest
 
     services:
@@ -41,21 +42,20 @@ jobs:
         image: michelforschufsm/portal-dengue-db:latest
         volumes:
           - portal_dengue_db:/var/lib/mysql
+        ports:
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: teste
           MYSQL_DATABASE: portal_dengue
           MYSQL_USER: teste
           MYSQL_PASSWORD: teste
-    steps:
-      - name: Start MYSQL
-        run: 
-          sudo /etc/init.d/mysql start
-
-  Analysis:
-    runs-on: ubuntu-latest
-    needs: Database
     
     steps:
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping --host=127.0.0.1 --password=$MYSQL_ROOT_PASSWORD --silent; do
+            sleep 1
+          done
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
