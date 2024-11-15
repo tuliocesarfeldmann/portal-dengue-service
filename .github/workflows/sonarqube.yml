@@ -5,9 +5,6 @@ on:
     branches:
       - '**'
 
-env:
-  PROJECT_VERSION: ""
-
 jobs:
   build:
     name: Build Project
@@ -83,7 +80,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: jar-file-${{ env.PROJECT_VERSION }}
+          name: jar-file-$PROJECT_VERSION
           path: target
 
       - name: Log in to Docker Hub
