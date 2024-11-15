@@ -5,6 +5,9 @@ on:
     branches:
       - '**'
 
+env:
+  PROJECT_VERSION: ""
+
 jobs:
   build:
     name: Build Project
@@ -23,8 +26,7 @@ jobs:
       - name: Extract project version
         id: get-version
         run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "Project version: $VERSION"
 
       - name: Build project
@@ -34,8 +36,8 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: jar-file-${{ env.VERSION }}
-          path: target/portaldengue-0.0.1-SNAPSHOT.jar
+          name: jar-file-${{ env.PROJECT_VERSION }}
+          path: target/portaldengue-${{ env.PROJECT_VERSION }}.jar
 
   # sonar:
   #   name: Run SonarQube Analysis
@@ -79,10 +81,10 @@ jobs:
 
       - name: Download build artifacts
         run: |
-          echo "Project version: $VERSION"
+          echo "Project version: $PROJECT_VERSION"
         # uses: actions/download-artifact@v3
         # with:
-          # name: jar-file-${{ env.VERSION }}
+          # name: jar-file-${{ env.PROJECT_VERSION }}
           # path: target
 
       - name: Log in to Docker Hub
@@ -97,5 +99,5 @@ jobs:
           context: .
           file: ./Dockerfile-service.dockerfile
           tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:${{ env.VERSION }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:${{ env.PROJECT_VERSION }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:latest
