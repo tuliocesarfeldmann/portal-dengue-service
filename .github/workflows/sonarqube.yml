@@ -75,10 +75,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: sonar
 
-    steps:
-      - env:
-          PROJECT_VERSION: ${{needs.build.outputs.PROJECT_VERSION}}
+    env:
+        PROJECT_VERSION: ${{needs.build.outputs.PROJECT_VERSION}}
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
