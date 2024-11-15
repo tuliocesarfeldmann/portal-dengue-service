@@ -6,9 +6,39 @@ on:
       - '**'
 
 jobs:
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Extract project version
+        id: get-version
+        run: |
+          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Build project
+        run: |
+          mvn clean package -DskipTests=true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: jar-file-${{ env.VERSION }}
+          path: target/portaldengue-0.0.1-SNAPSHOT.jar
+
   sonar:
     name: Run SonarQube Analysis
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout repository
@@ -31,7 +61,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
         run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=porta-dengue-service \
             -Dsonar.projectName='porta-dengue-service' \
             -DskipTests=true
@@ -40,19 +70,16 @@ jobs:
     name: Publish Docker Image
     runs-on: ubuntu-latest
     needs: sonar
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Build project
-        run: |
-          mvn clean package -DskipTests=true
+          name: jar-file-${{ env.VERSION }}
+          path: target
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -64,6 +91,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: true
           file: ./Dockerfile-service.dockerfile
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:latest
+          tags: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:${{ env.VERSION }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:latest
