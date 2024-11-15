@@ -27,7 +27,7 @@ jobs:
         run: |
           PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
-          echo "::set-output name=PROJECT_VERSION::$PROJECT_VERSION"
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build project
         run: |
@@ -76,13 +76,16 @@ jobs:
     needs: sonar
 
     steps:
+      - env:
+          PROJECT_VERSION: ${{needs.build.outputs.PROJECT_VERSION}}
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: jar-file-${{ needs.build.outputs.PROJECT_VERSION }}
+          name: jar-file-${{ env.PROJECT_VERSION }}
           path: target
 
       - name: Log in to Docker Hub
@@ -98,5 +101,5 @@ jobs:
           push: true
           file: ./Dockerfile-service.dockerfile
           tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:${{ needs.build.outputs.PROJECT_VERSION }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:${{ env.PROJECT_VERSION }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:latest
