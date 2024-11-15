@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jar-file-${{ env.VERSION }}
-          path: target/portaldengue-0.0.1-SNAPSHOT.jar
+          path: target/portaldengue-${{ env.VERSION }}.jar
 
   sonar:
     name: Run SonarQube Analysis
