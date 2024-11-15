@@ -23,7 +23,9 @@ jobs:
       - name: Extract project version
         id: get-version
         run: |
-          echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Project version: $VERSION"
 
       - name: Build project
         run: |
@@ -33,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jar-file-${{ env.VERSION }}
-          path: target/portaldengue-${{ env.VERSION }}.jar
+          path: target/portaldengue-0.0.1-SNAPSHOT.jar
 
   sonar:
     name: Run SonarQube Analysis
