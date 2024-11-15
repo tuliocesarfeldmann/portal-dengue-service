@@ -64,5 +64,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          push: true
           file: ./Dockerfile-service.dockerfile
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:latest
