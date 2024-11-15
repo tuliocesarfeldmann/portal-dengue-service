@@ -72,7 +72,9 @@ jobs:
   docker:
     name: Publish Docker Image
     runs-on: ubuntu-latest
-    needs: sonar
+    needs:
+        - build
+        - sonar
 
     env:
         PROJECT_VERSION: ${{ needs.build.outputs.PROJECT_VERSION }}
