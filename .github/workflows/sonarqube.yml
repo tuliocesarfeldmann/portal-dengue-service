@@ -38,36 +38,36 @@ jobs:
           name: jar-file-${{ env.PROJECT_VERSION }}
           path: target/portaldengue-${{ env.PROJECT_VERSION }}.jar
 
-  # sonar:
-  #   name: Run SonarQube Analysis
-  #   runs-on: ubuntu-latest
-  #   needs: build
+  sonar:
+    name: Run SonarQube Analysis
+    runs-on: ubuntu-latest
+    needs: build
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  #     - name: Set up JDK
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         java-version: '17'
-  #         distribution: 'temurin'
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-  #     - name: Cache SonarQube dependencies
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ~/.sonar/cache
-  #         key: ${{ runner.os }}-sonar
+      - name: Cache SonarQube dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
 
-  #     - name: Run SonarQube Scanner
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #         SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
-  #       run: |
-  #         mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-  #           -Dsonar.projectKey=porta-dengue-service \
-  #           -Dsonar.projectName='porta-dengue-service' \
-  #           -DskipTests=true
+      - name: Run SonarQube Scanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
+        run: |
+          mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=porta-dengue-service \
+            -Dsonar.projectName='porta-dengue-service' \
+            -DskipTests=true
 
   docker:
     name: Publish Docker Image
@@ -80,11 +80,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: TESTE MEU
-        run: |
-          echo "PRIMEIRO --> $PROJECT_VERSION"
-          echo "SEGUNDO --> ${{ needs.build.outputs.PROJECT_VERSION }}"
 
       - name: Download build artifacts
         uses: actions/download-artifact@v3
