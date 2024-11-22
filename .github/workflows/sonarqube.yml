@@ -104,3 +104,27 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:${{ env.PROJECT_VERSION }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/portal-dengue-service:latest
+            
+  deploy:
+    name: Update App on Server
+    runs-on: ubuntu-latest
+    needs:
+      - docker
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to server
+      run: |
+        ssh -o StrictHostKeyChecking=no michel@michelfkf.dev.br << 'EOF'
+          cd /home/michel/
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d
+        EOF
