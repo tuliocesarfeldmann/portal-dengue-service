@@ -12,7 +12,26 @@ jobs:
     outputs:
       PROJECT_VERSION: ${{ steps.get-version.outputs.PROJECT_VERSION }}
 
+    services:
+      db:
+        image: michelforschufsm/portal-dengue-db:latest
+        volumes:
+          - portal_dengue_db:/var/lib/mysql
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: teste
+          MYSQL_DATABASE: portal_dengue
+          MYSQL_USER: teste
+          MYSQL_PASSWORD: teste
+
     steps:
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping --host=127.0.0.1 --password=$MYSQL_ROOT_PASSWORD --silent; do
+            sleep 1
+          done
+    
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -30,7 +49,7 @@ jobs:
 
       - name: Build project
         run: |
-          mvn clean package -DskipTests=true
+          mvn clean package
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
