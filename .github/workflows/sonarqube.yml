@@ -124,7 +124,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no michel@michelfkf.dev.br << 'EOF'
           cd /home/michel/
-          docker-compose down
-          docker-compose pull
-          docker-compose up -d
+          docker compose down
+          docker compose pull
+          docker compose up -d
         EOF
