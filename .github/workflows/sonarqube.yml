@@ -48,6 +48,11 @@ jobs:
           echo "PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> "$GITHUB_OUTPUT"
 
       - name: Build project
+        env:
+          DATABASE_URL: localhost
+          DATABASE_NAME: portal_dengue
+          DATABASE_USERNAME: teste
+          DATABASE_PASSWORD: teste
         run: |
           mvn clean package
 
