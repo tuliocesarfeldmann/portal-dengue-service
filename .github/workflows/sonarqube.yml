@@ -91,7 +91,8 @@ jobs:
           mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=porta-dengue-service \
             -Dsonar.projectName='porta-dengue-service' \
-            -DskipTests=true
+            -DskipTests=true \
+            -Pcoverage
 
   docker:
     name: Publish Docker Image
