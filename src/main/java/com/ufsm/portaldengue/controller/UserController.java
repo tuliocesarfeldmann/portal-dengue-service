@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador responsável pelo acesso de usuários
+ */
+
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -23,8 +27,13 @@ public class UserController {
     @Autowired
     UserRepository repository;
 
+    /**
+     * Realiza o login do usuário
+     *
+     * @param user JSON com os dados de login do usuário
+     */
     @PostMapping("/public/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO user){
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO user) {
         try {
             return ResponseEntity.ok(service.login(user));
         } catch (Exception e) {
@@ -35,8 +44,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Método interno para realizar o registro de usuários administradores
+     * 
+     * @param user JSON com os dados completos do usuário
+     */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Validated UserDTO user){
+    public ResponseEntity<?> register(@RequestBody @Validated UserDTO user) {
         try {
             return ResponseEntity.ok(service.register(user));
         } catch (Exception e) {
@@ -47,6 +61,9 @@ public class UserController {
         }
     }
 
+    /**
+     * Método para listar usuários na página de controle de usuários
+     */
     @GetMapping("/list")
     public ResponseEntity<?> list() {
         try {
@@ -61,6 +78,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Método para marcar usuário como ativo ou inativo
+     * 
+     * @param id      identifica sobre qual usuário sera alterado
+     * @param request identifica se o usuário deverá ser marcado como ativo ou
+     *                inativo
+     */
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUserStatus(@PathVariable Long id, @RequestBody UpdateUserDTO request) {
         service.updateUserStatus(id, request.isActive());
