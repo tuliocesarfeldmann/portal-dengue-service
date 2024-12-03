@@ -2,6 +2,7 @@ package com.ufsm.portaldengue.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,9 +11,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PONTOS")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
