@@ -15,7 +15,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
