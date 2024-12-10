@@ -11,17 +11,17 @@ import com.ufsm.portaldengue.model.entity.Point;
 import com.ufsm.portaldengue.model.entity.PointSituation;
 
 @SpringBootTest
-public class PointRepositoryTests {
+class PointRepositoryTests {
 	@Autowired
 	PointRepository pointRepository;
 
 	@Test
-	public void PointRepositorySaveTest() {
+	void PointRepositorySaveTest() {
 		Point point = new Point(1L, 5.5, 5.5, "teste", LocalDateTime.now(), PointSituation.getDefaultPointSituation());
 		Point savedPoint = pointRepository.save(point);
 
 		Assertions.assertThat(savedPoint).isNotNull();
-		Assertions.assertThat(savedPoint.getId()).isGreaterThan(0);
+		Assertions.assertThat(savedPoint.getId()).isPositive();
 	}
 
 }
